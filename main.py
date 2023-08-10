@@ -6,22 +6,25 @@ def pegarInfosXml(arquivo, valores):
     with open(f'xmls/{arquivo}', "rb") as arquivo_xml:
         dic_arquivo = xmltodict.parse(arquivo_xml)
         inf_nota = dic_arquivo["nfeProc"]["NFe"]["infNFe"]
-        chave_nota = inf_nota["@Id"]
-        emitente_CNPJ = inf_nota["emit"]["CNPJ"]
-        emitente_nome = inf_nota["emit"]["xNome"]
-        destinatario_CNPJ = inf_nota["dest"]["CNPJ"]
         destinatario_nome = inf_nota["dest"]["xNome"]
-        valores.append([chave_nota, emitente_CNPJ,emitente_nome,destinatario_CNPJ,destinatario_nome])
-
+        destinatario_CNPJ = inf_nota["dest"]["CNPJ"]
+        emitente_CNPJ = inf_nota["emit"]["CNPJ"]
+        valor = float(inf_nota["pag"]["detPag"]["vPag"])
+        
+        if destinatario_nome in valores:
+            valores[destinatario_nome][3] += valor
+        else:
+            valores[destinatario_nome] = [destinatario_nome, destinatario_CNPJ, emitente_CNPJ, valor]
 
 listar_arquivos = os.listdir("xmls")
 
-colunas = ["Chave_NFe", "CNPJ_Emissor","Nome_Emissor", "CNPJ_Destinatario", "Nome_Destinatario"]
-valores = []
-
+colunas = ["Destinaratio nome", "destinaratio CNPJ", "emitente_CNPJ", "valores"]
+valores = {}
 
 for arquivo in listar_arquivos:
     pegarInfosXml(arquivo, valores)
 
-tabelas = pd.DataFrame(columns=colunas, data=valores)
+resultado_final = list(valores.values())
+
+tabelas = pd.DataFrame(columns=colunas, data=resultado_final)
 tabelas.to_excel("NotasFiscais.xlsx", index=False)
