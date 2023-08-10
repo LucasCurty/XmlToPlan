@@ -18,7 +18,7 @@ def pegarInfosXml(arquivo, valores):
 
 listar_arquivos = os.listdir("xmls")
 
-colunas = ["Destinaratio nome", "destinaratio CNPJ", "emitente_CNPJ", "valores"]
+#colunas = ["Destinaratio nome", "destinaratio CNPJ", "emitente_CNPJ", "valores"]
 valores = {}
 
 for arquivo in listar_arquivos:
@@ -26,5 +26,8 @@ for arquivo in listar_arquivos:
 
 resultado_final = list(valores.values())
 
-tabelas = pd.DataFrame(columns=colunas, data=resultado_final)
-tabelas.to_excel("NotasFiscais.xlsx", index=False)
+print(resultado_final)
+
+#criar uma pasta com o nome xmls e colocar as notas fiscais, descomentar os 2 codigos abaixo e a variavel colunas para gerar o arquivo de planilha
+#tabelas = pd.DataFrame(columns=colunas, data=resultado_final)
+#tabelas.to_excel("NotasFiscais.xlsx", index=False)
